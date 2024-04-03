@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhà phân phối</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="static/plugins/fontawesome-free/css/all.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="static/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="static/plugins/toastr/toastr.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="static/dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="static/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="static/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+</head>
+
+<body>
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a class="brand-link">
+      <span class="brand-text font-weight-light" style="display: none;">Trang quản lý xe</span>
+	  <img src="/static/logo-lf.png" style="width: 100%;">
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open" style="display: show_ncc;">
+            <a href="/ncc" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Danh sách nhà cung cấp
+              </p>
+            </a>
+          </li>
+		  <li class="nav-item menu-open" style="display: show_npp">
+            <a href="/npp" class="nav-link active">
+              <i class="nav-icon fas fa-city"></i>
+              <p>
+                Danh sách nhà phân phối
+              </p>
+            </a>
+          </li>
+			<li class="nav-item menu-open" style="display: show_listtruck;">
+				<a href="list-truck" class="nav-link">
+				  <i class="nav-icon fas fa-truck"></i>
+				  <p>
+					Danh sách xe
+				  </p>
+				</a>
+			</li>
+			<li class="nav-item menu-open" style="display: show_map;">
+				<a href="map" class="nav-link">
+				  <i class="nav-icon fas fa-map-marker"></i>
+				  <p>
+					Bản đồ
+				  </p>
+				</a>
+			</li>
+      <li class="nav-item menu-open" style="display: show_user;">
+				<a href="/user" class="nav-link">
+				  <i class="nav-icon fas fa-users"></i>
+				  <p>
+					Người dùng
+				  </p>
+				</a>
+			</li>
+      <li class="nav-item menu-open">
+				<a href="/logout" class="nav-link">
+				  <i class="nav-icon fas fa-power-off"></i>
+				  <p>
+					Đăng xuất
+				  </p>
+				</a>
+			</li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+
+  </aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Nhà phân phối</h1>
+          </div><!-- /.col -->
+
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+              <li class="breadcrumb-item active">Nhà phân phối</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Danh sách tài khoản nhà phân phối</h3>
+                <br>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProvider">
+                  Thêm NPP
+                </button>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Mã NPP</th>
+                      <th>Tên NPP</th>
+                      <th>Khu vực</th>
+                      <th>Lat</th>
+					  <th>Long</th>
+                      <th>Trạng thái</th>
+                      <th>Cập nhật</th>
+                    </tr>
+                  </thead>
+                  <tbody id="example1body">
+
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</body>
+<!-- modal thêm ncc-->
+<div class="modal fade" id="addProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xs modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm NPP</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Mã NPP</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="addMaNPP" runat="server" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Tên NPP</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="addTenNPP" runat="server" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Khu vực</label>
+                  <div class="col-md-9">
+                    <select class="form-select" id="addKhuvuc" runat="server">
+                      <option value="Miền Nam">Miền Nam</option>
+                      <option value="Miền Bắc">Miền Bắc</option>
+                      <option value="Miền Trung">Miền Trung</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Lat</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="addLat" runat="server">
+                  </div>
+                </div>
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Long</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="addLong" runat="server">
+                  </div>
+                </div>
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Trạng thái</label>
+                  <div class="col-md-9">
+                    <select class="form-select" id="addStatus" runat="server">
+                      <option value="0">Ẩn</option>
+                      <option value="1">Hiện</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button ID="AddProviderSubmit" type="button" class="btn btn-primary"
+                    OnClick="btn_addProvider_Submit_Click()">Thêm mới</button>
+                </div>
+                <br>
+                <div class="mb-3" id="AddPanel" hidden="true">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+<!-- end modal thêm NCC-->
+<!-- modal edit ncc-->
+<div class="modal fade" id="UpdateProvider" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xs modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cập nhật NPP</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Mã NPP</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="updateMaNPP" runat="server" disabled="disabled" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Tên NPP</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="updateTenNPP" runat="server" />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Khu vực</label>
+                  <div class="col-md-9">
+                    <select class="form-select" id="updateKhuvuc" runat="server">
+                      <option value="Miền Nam">Miền Nam</option>
+                      <option value="Miền Bắc">Miền Bắc</option>
+                      <option value="Miền Trung">Miền Trung</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Lat</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="updateLat" runat="server">
+                  </div>
+                </div>
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Long</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="updateLong" runat="server">
+                  </div>
+                </div>
+				<div class="mb-3 row">
+                  <label class="col-md-3 col-form-label">Trạng thái</label>
+                  <div class="col-md-9">
+                    <select class="form-select" id="updateStatus" runat="server">
+                      <option value="0">Ẩn</option>
+                      <option value="1">Hiện</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button ID="AddProviderSubmit" type="button" class="btn btn-primary"
+                    OnClick="btn_updateProvider_Submit_Click()">Cập nhật</button>
+                </div>
+                <br>
+                <div class="mb-3" id="updatePanel" hidden="true">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+<!-- end modal edit NCC-->
+<!-- jQuery -->
+<script src="static/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="static/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="static/plugins/toastr/toastr.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="static/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="static/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="static/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="static/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="static/plugins/jszip/jszip.min.js"></script>
+<script src="static/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="static/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="static/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="static/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="static/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- AdminLTE App -->
+<script src="static/dist/js/adminlte.min.js"></script>
+
+<script>
+  listAccount = []
+
+
+  function btn_updateProvider_Submit_Click() {
+    var myHeaders = new Headers();
+    myHeaders.append("accept", "application/json");
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "manpp": document.getElementById("updateMaNPP").value,
+      "tennpp": document.getElementById("updateTenNPP").value,
+      "region": document.getElementById("updateKhuvuc").value,
+      "lat": document.getElementById("updateLat").value,
+	  "long": document.getElementById("updateLong").value,
+	  "status": document.getElementById("updateStatus").value
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    fetch("http://lfgps.khaanh.com:8080/InsertNPP", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        if (JSON.parse(result).result == "Thành công") {
+          var updatePanel = document.getElementById("updatePanel")
+          updatePanel.hidden = false;
+          updatePanel.classList.add("bg-success");
+          updatePanel.innerText = "Cập nhật thành công";
+          setTimeout(function () {
+            window.location.reload();
+          }, 1000);
+        }
+        else {
+          var updatePanel = document.getElementById("updatePanel")
+          updatePanel.hidden = false;
+          updatePanel.classList.add("bg-danger");
+          updatePanel.innerText = JSON.parse(result).result;
+        }
+
+      })
+      .catch(error => console.log('error', error));
+  }
+  function btn_addProvider_Submit_Click() {
+    if (document.getElementById("addMaNPP").value == "" || document.getElementById("addTenNPP").value == "" || document.getElementById("addKhuvuc").value == "" || document.getElementById("addLat").value == "" || document.getElementById("addLong").value == "" || document.getElementById("addStatus").value == "") {
+      var addPanel = document.getElementById("AddPanel")
+      addPanel.hidden = false;
+      addPanel.classList.add("bg-danger");
+      addPanel.innerText = "Bạn phải điền đầy đủ thông tin"
+      return
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("accept", "application/json");
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "manpp": document.getElementById("addMaNPP").value,
+      "tennpp": document.getElementById("addTenNPP").value,
+      "region": document.getElementById("addKhuvuc").value,
+      "lat": document.getElementById("addLat").value,
+	  "long": document.getElementById("addLong").value,
+	  "status": document.getElementById("addStatus").value
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    fetch("http://lfgps.khaanh.com:8080/InsertNPP", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        if (JSON.parse(result).result == "Thành công") {
+          var addPanel = document.getElementById("AddPanel")
+          addPanel.hidden = false;
+          addPanel.classList.add("bg-success");
+          addPanel.innerText = "Thêm mới thành công";
+          setTimeout(function () {
+            window.location.reload();
+          }, 1000);
+        }
+        else {
+          var addPanel = document.getElementById("AddPanel")
+          addPanel.hidden = false;
+          addPanel.classList.add("bg-danger");
+          addPanel.innerText = JSON.parse(result).result;
+        }
+
+      })
+      .catch(error => console.log('error', error));
+  }
+  
+	// Hàm lấy dữ liệu
+	async function fetchData() {
+	  const response = await $.get("http://lfgps.khaanh.com:8080/ListNPP");
+	  return response;
+	}
+	
+	// Gọi fetchData và xử lý dữ liệu
+	fetchData().then(npps => {
+	  npps.forEach(item => {
+		addDataToTable(item);
+	  });
+	  initDataTable();
+	});
+	
+    function initDataTable() {
+		table = $('#example1').DataTable({
+			orderCellsTop: true,
+			"paging": true,
+			initComplete: function () {
+			var api = this.api();
+			count = 0;
+			$('.filterhead', api.table().header()).each( function (i) {
+				var column = api.column(i);
+				var title = column.header();
+				//replace spaces with dashes
+				titleid = $(title).html().replace(/[\W]/g, '-');
+				
+				var select = $('<select id="' + titleid + '" class="select2" ></select>')
+					.appendTo( $(this).empty() )
+					.on( 'change', function () {
+					  //Get the "text" property from each selected data 
+					  //regex escape the value and store in array
+					  var data = $.map( $(this).select2('data'), function( value, key ) {
+						return value.text ? '^' + $.fn.dataTable.util.escapeRegex(value.text) + '$' : null;
+								 });
+					  
+					  //if no data selected use ""
+					  if (data.length === 0) {
+						data = [""];
+					  }
+					  
+					  //join array into string with regex or (|)
+					  var val = data.join('|');
+					  
+					  //search for the option(s) selected
+					  column
+							.search( val ? val : '', true, false )
+							.draw();
+					} );
+
+				column.data().unique().sort().each( function ( d, j ) {
+					select.append( '<option value="'+d+'">'+d+'</option>' );
+				} );
+			  
+			  //use column title as selector and placeholder
+			  $('#' + titleid).select2({
+				multiple: true,
+				closeOnSelect: false,
+				placeholder: "Chọn " + $(title).html()
+			  });
+			  
+			  //initially clear select otherwise first option is selected
+			  $('.select2').val(null).trigger('change');
+			} );
+		},
+		"responsive": true, "lengthChange": false, "autoWidth": false, "pageLength": 50,
+		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+	}
+
+	function addDataToTable(item) {
+        let table = document.getElementById("example1body");
+        let row = table.insertRow(0);
+        let c1 = row.insertCell(0);
+        let c2 = row.insertCell(1);
+        let c3 = row.insertCell(2);
+        let c4 = row.insertCell(3);
+        let c5 = row.insertCell(4);
+        let c6 = row.insertCell(5);
+		let c7 = row.insertCell(6);
+        c1.innerText = item[0];
+        c2.innerText = item[2];
+        c3.innerText = item[1];
+        c4.innerText = item[3];
+		c5.innerText = item[4];
+        if(item[5] == 0){
+          c6.innerHTML = '<p class="text-danger">Ẩn</p>';
+        }
+        else{
+          c6.innerHTML = '<p class="text-success">Hiện</p>';
+        }
+        c7.innerHTML = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UpdateProvider" onclick=\'loadUpdateModel(' + JSON.stringify(item) + ')\'>Sửa NPP</button>'
+	}
+
+  function loadUpdateModel(item) {
+    document.getElementById("updateMaNPP").value = item[0];
+    document.getElementById("updateTenNPP").value = item[2];
+    document.getElementById("updateKhuvuc").value = item[1];
+    document.getElementById("updateLat").value = item[3];
+	document.getElementById("updateLong").value = item[4];
+	document.getElementById("updateStatus").value = item[5];
+    console.log(item)
+  }
+</script>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bản đồ</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/plugins/fontawesome-free/css/all.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="/static/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="/static/plugins/toastr/toastr.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="/static/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/static/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <style>
+	html, body {
+		height: 100%;
+		margin: 0;
+	}
+
+	#car-list {
+	  width: 100%; 
+	  height: calc(50vh - 150px);
+	  align-items: center;  
+	  justify-content: center;
+	  overflow: scroll;
+	  margin-top: 20px;
+	}
+
+	#map {
+	  width: 100%;
+	  height: calc(50vh);
+	  position: relative;
+	}
+	
+	#car-table {
+	  padding: 0px !important;
+	  margin: 0px !important;
+	}
+	
+	#car-list div {
+	  padding: 0px;
+	  margin: 0px;
+	  background: #f4f4f4;
+	  text-align: center;
+	}
+	
+	#car-list div:hover {
+	  background: #e4e4e4;
+	  cursor: pointer;
+	}
+	tfoot input {
+		width: 100%;
+	}
+	
+	#car-table_wrapper .row:first-child, #car-table_wrapper .row:last-child>div:first-child {
+		display:none;
+	}
+	
+	.car-stop td {
+		color: red;
+	}
+	
+	.car-start td {
+		color: green;
+	}
+	
+	thead {
+		position: sticky;
+		top: 0;
+		background: antiquewhite;
+	}
+	
+	tbody td {
+		padding: 5px !important;
+	}
+	
+	.filterhead {
+	  padding: 5px !important;
+	}
+	
+	.filterhead .select2 {
+	  width: 100% !important;
+	}
+	
+	.leaflet-tooltip {
+	  text-align: center;
+	}
+	
+	.tooltip-soxe {
+	  font-weight: bold;
+	  font-size: larger;
+	  display: block;
+	  text-align: center;
+	}
+	
+	.tooltip-hide {
+		display: none;
+	}
+
+	.tooltip-show {
+		display: inline-block;
+	}
+  </style>
+</head>
+
+<body>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="margin-left: 0px;">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-4">
+            <a href="/"><img src="/static/logo-lf.png" style="width: 100px;position: absolute;top: -10px;"></a>
+          </div><!-- /.col -->
+		  <div class="col-sm-4" style="text-align: center">
+			<button class="btn btn-warning offnpp">On/Off NPP</button>
+			<button class="btn btn-primary offtrucks">On/Off Truck Info</button>
+		  </div>
+          <div class="col-sm-4">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+              <li class="breadcrumb-item active">Bản đồ</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+				<div id='map'></div>
+				<div id="car-list">
+					<table class="table table-bordered table-striped" id="car-table">
+						<thead>
+							<tr>
+								<th>Khu vực</th>
+								<th>Nhà phân phối</th>
+								<th>Nhà vận tải</th>
+								<th>Số xe</th>
+								<th>Ngày đi</th>
+								<th>Giờ đi</th>
+								<th>Last Update</th>
+							</tr>
+							<tr>
+								<th class="filterhead">Khu vực</th>
+								<th class="filterhead">Nhà phân phối</th>
+								<th class="filterhead">Nhà vận tải</th>
+								<th class="filterhead">Số xe</th>
+								<th class="filterhead">Ngày đi</th>
+								<th class="filterhead">Giờ đi</th>
+								<th>Last Update</th>
+							</tr>
+						</thead>
+						<tbody id="car-list-row">
+						</tbody>
+					</table>
+				</div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</body>
+<!-- jQuery -->
+<script src="/static/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="/static/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="/static/plugins/toastr/toastr.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/static/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/static/plugins/jszip/jszip.min.js"></script>
+<script src="/static/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="/static/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/static/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- Select2 plugin -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+<!-- Select2 plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/dist/js/adminlte.min.js"></script>
+
+<script>
+	let auth_code = "AUTH_CODE";
+</script>
+
+<script src="/static/map.js"></script>
+
+<script>
+
+</script>
+
+</html>
