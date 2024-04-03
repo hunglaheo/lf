@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách xe</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="./plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="./plugins/toastr/toastr.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="./plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="./plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="./plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  
+  <style>
+	tfoot input {
+		width: 100%;
+	}
+	tbody td {
+		padding: 5px !important;
+	}
+	
+	.filterhead {
+	  padding: 5px !important;
+	}
+	
+	.filterhead .select2 {
+	  width: 100% !important;
+	}
+  </style>
+</head>
+
+<body>
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a class="brand-link">
+      <span class="brand-text font-weight-light">Trang quản lý xe</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="index.html" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Danh sách nhà cung cấp
+              </p>
+            </a>
+
+          </li>
+			<li class="nav-item menu-open">
+				<a href="list-truck.html" class="nav-link active">
+				  <i class="nav-icon fas fa-truck"></i>
+				  <p>
+					Danh sách xe
+				  </p>
+				</a>
+			</li>
+			<li class="nav-item menu-open">
+				<a href="map.html" class="nav-link">
+				  <i class="nav-icon fas fa-map-marker"></i>
+				  <p>
+					Bản đồ
+				  </p>
+				</a>
+			</li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+
+  </aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Danh sách xe</h1>
+          </div><!-- /.col -->
+
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+              <li class="breadcrumb-item active">Danh sách xe</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+					  <th>Khu vực</th>
+                      <th>Nhà phân phối</th>
+					  <th>Nhà vận tải</th>
+                      <th>Biển số xe</th>
+                      <th>Ngày đi</th>
+                      <th>Giờ đi</th>
+					  <th>Tình trạng xe</th>
+					  <th>Trạng thái</th>
+					  <th>Last Update</th>
+                    </tr>
+                    <tr>
+					  <th class="filterhead">Khu vực</th>
+                      <th class="filterhead">Nhà phân phối</th>
+					  <th class="filterhead">Nhà vận tải</th>
+                      <th class="filterhead">Biển số xe</th>
+                      <th class="filterhead">Ngày đi</th>
+                      <th class="filterhead">Giờ đi</th>
+					  <th class="filterhead">Tình trạng xe</th>
+					  <th class="filterhead">Trạng thái</th>
+					  <th>Last Update</th>
+                    </tr>
+                  </thead>
+				  <!--
+                  <tfoot style="display: table-header-group">
+                    <tr>
+					  <th>Khu vực</th>
+                      <th>Nhà phân phối</th>
+					  <th>Nhà vận tải</th>
+                      <th>Biển số xe</th>
+                      <th>Ngày đi</th>
+                      <th>Giờ đi</th>
+                      <th>Lat</th>
+                      <th>Long</th>
+					  <th>Tình trạng xe</th>
+					  <th>Trạng thái</th>
+					  <th>Last Update</th>
+                    </tr>
+                  </tfoot>
+				  -->
+                  <tbody id="example1body">
+				  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+</body>
+<!-- jQuery -->
+<script src="./plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="./plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="./plugins/toastr/toastr.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="./plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="./plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="./plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="./plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="./plugins/jszip/jszip.min.js"></script>
+<script src="./plugins/pdfmake/pdfmake.min.js"></script>
+<script src="./plugins/pdfmake/vfs_fonts.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- Select2 plugin -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+<!-- Select2 plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
+
+<script>
+  listTruck = []
+
+  fetch("./truck.json", { cache: "no-store" }).then(response => response.text())
+    .then(data => {
+      listTruck = JSON.parse(data);
+      //document.getElementById("example1").deleteRow(1);
+      listTruck.forEach(item => {
+        let table = document.getElementById("example1body");
+        let row = table.insertRow(0);
+        let c1 = row.insertCell(0);
+        let c2 = row.insertCell(1);
+        let c3 = row.insertCell(2);
+        let c4 = row.insertCell(3);
+        let c5 = row.insertCell(4);
+        let c6 = row.insertCell(5);
+		let c7 = row.insertCell(6);
+		let c8 = row.insertCell(7);
+		let c9 = row.insertCell(8);
+        c1.innerText = item[8];
+		c2.innerText = item[2];
+        c3.innerText = item[3];
+        c4.innerText = item[1];
+        c5.innerText = item[4];
+		c6.innerText = item[5];
+		c7.innerText = item[9];
+		if(item[10]==2)
+			c8.innerText = 'Đã ngưng gửi dữ liệu';
+		else if(item[10]==1)
+			c8.innerText = 'Đang gửi dữ liệu';
+		else if(item[10]==3)
+			c8.innerText = 'Chưa có Account GPS';
+		else
+			c8.innerText = 'Chưa tới chuyến';
+		c9.innerText = item[11];
+      }
+      )
+      
+    }
+    ).finally(()=>{
+      $(function () {
+		table = $('#example1').DataTable({
+			orderCellsTop: true,
+			"paging": true,
+			initComplete: function () {
+			var api = this.api();
+			count = 0;
+			$('.filterhead', api.table().header()).each( function (i) {
+				var column = api.column(i);
+				var title = column.header();
+				//replace spaces with dashes
+				titleid = $(title).html().replace(/[\W]/g, '-');
+				
+				var select = $('<select id="' + titleid + '" class="select2" ></select>')
+					.appendTo( $(this).empty() )
+					.on( 'change', function () {
+					  //Get the "text" property from each selected data 
+					  //regex escape the value and store in array
+					  var data = $.map( $(this).select2('data'), function( value, key ) {
+						return value.text ? '^' + $.fn.dataTable.util.escapeRegex(value.text) + '$' : null;
+								 });
+					  
+					  //if no data selected use ""
+					  if (data.length === 0) {
+						data = [""];
+					  }
+					  
+					  //join array into string with regex or (|)
+					  var val = data.join('|');
+					  
+					  //search for the option(s) selected
+					  column
+							.search( val ? val : '', true, false )
+							.draw();
+					} );
+
+				column.data().unique().sort().each( function ( d, j ) {
+					select.append( '<option value="'+d+'">'+d+'</option>' );
+				} );
+			  
+			  //use column title as selector and placeholder
+			  $('#' + titleid).select2({
+				multiple: true,
+				closeOnSelect: false,
+				placeholder: "Chọn " + $(title).html()
+			  });
+			  
+			  //initially clear select otherwise first option is selected
+			  $('.select2').val(null).trigger('change');
+			} );
+		},
+		"responsive": true, "lengthChange": false, "autoWidth": false,
+		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+		
+		/*
+		new DataTable('#example1', {
+			initComplete: function () {
+				this.api()
+					.columns()
+					.every(function () {
+						let column = this;
+						let title = column.footer().textContent;
+		 
+						// Create input element
+						let input = document.createElement('input');
+						input.placeholder = title;
+						column.footer().replaceChildren(input);
+		 
+						// Event listener for user input
+						input.addEventListener('keyup', () => {
+							if (column.search() !== this.value) {
+								column.search(input.value).draw();
+							}
+						});
+					});
+			},
+			"responsive": true, "lengthChange": false, "autoWidth": false,
+			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+		*/
+	  });
+    }
+      
+    );
+  function loadUpdateModel(item) {
+    document.getElementById("updateDonvi").value = item.donvi;
+    document.getElementById("updateTaiKhoan").value = item.taikhoan;
+    document.getElementById("updateTen").value = item.ten;
+    document.getElementById("updatePassword").value = item.password;
+    console.log(item)
+  }
+</script>
+</html>
